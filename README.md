@@ -24,10 +24,14 @@ When the publisher program is executed, it sends five `UserCreatedEventMessage` 
 
 The subscriber program listens to the same `user_created` queue. After the publisher sends the events, the subscriber receives them one by one and prints the message contents to the console. This shows the event-driven architecture flow: the publisher only publishes events, RabbitMQ routes the messages, and the subscriber processes the events independently.
 
-## Monitoring chart based on publisher
+## Bonus: Sending and processing event on cloud
 
-![RabbitMQ message chart](assets/message-chart.png)
+![Cloud RabbitMQ running](assets/bonus-cloud-rabbitmq-running.png)
 
-The spike in the RabbitMQ message chart appears when the publisher program is executed. Each run of the publisher sends five messages to the `user_created` queue, so RabbitMQ records a short burst of message activity. The chart rises because messages are entering the broker, then it goes back down after the subscriber consumes and acknowledges those messages.
+![Cloud publisher console](assets/bonus-cloud-publisher-console.png)
 
-When the publisher is run repeatedly, the chart can show repeated spikes or a higher temporary message rate. This happens because RabbitMQ receives several groups of five events in a short time. The spike therefore represents the broker activity caused by the publisher sending events, while the decrease after the spike shows that the messages have been processed by the subscriber.
+![Cloud subscriber console](assets/bonus-cloud-subscriber-console.png)
+
+For the bonus experiment, RabbitMQ was moved from the local machine to a Google Cloud VM. The publisher and subscriber programs still run the same event-driven flow, but they connect to the cloud broker through the VM public IP instead of using the local RabbitMQ container. The publisher sends five `UserCreatedEventMessage` events to the `user_created` queue on the cloud RabbitMQ broker.
+
+The subscriber receives those messages from the cloud queue and prints the event data in the console. This proves that the publisher and subscriber do not need to be on the same machine as the message broker. As long as the AMQP URL, user credentials, and firewall ports are configured correctly, RabbitMQ can route events through the cloud just like it did locally.
