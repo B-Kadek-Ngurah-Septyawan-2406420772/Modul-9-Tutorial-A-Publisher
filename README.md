@@ -13,3 +13,13 @@ The URL `amqp://guest:guest@localhost:5672` being the same means both the publis
 ## Running RabbitMQ as message broker
 
 ![RabbitMQ running](assets/rabbitmq-running.png)
+
+## Sending and processing event
+
+![Publisher console](assets/publisher-console.png)
+
+![Subscriber console](assets/subscriber-console.png)
+
+When the publisher program is executed, it sends five `UserCreatedEventMessage` events to RabbitMQ through the `user_created` queue. The publisher does not send the messages directly to the subscriber. Instead, RabbitMQ acts as the message broker that receives and stores the events until they are consumed.
+
+The subscriber program listens to the same `user_created` queue. After the publisher sends the events, the subscriber receives them one by one and prints the message contents to the console. This shows the event-driven architecture flow: the publisher only publishes events, RabbitMQ routes the messages, and the subscriber processes the events independently.
